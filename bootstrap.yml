@@ -10,7 +10,7 @@
     transport: tcp
     credentials:
       username: '215706'
-      secret: +2ORvgB#blHU
+      secret: changeit
 
 - apiVersion: v1beta1
   kind: Number
