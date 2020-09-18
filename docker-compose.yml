@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  routr:
+    env_file: .env
+    image: psanders/routr:rtpengine_support
+    depends_on: [redis]
+    ports: ['5060:5060', '5060:5060/udp', '4567:4567']
+  redis:
+    image: redis:6.0.3-alpine
+    command: ['redis-server', '--appendonly', 'yes']
+    hostname: redis
+    expose: [6379]
+  rtpengine:
+    env_file: .env
+    image: psanders/rtpengine:latest
+    restart: always
+    ports: ['22222:22222/udp', '20000-20100:20000-20100/udp']
+  rtpengine-middleware:
+    env_file: .env
+    image: psanders/rtpengine-mw:latest
+    restart: always
+    ports: ['3000:3000/tcp']
