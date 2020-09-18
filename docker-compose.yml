@@ -5,6 +5,16 @@ services:
     image: psanders/routr:rtpengine_support
     depends_on: [redis]
     ports: ['5060:5060', '5060:5060/udp', '4567:4567']
+    volumes:  
+      - ./config/log4j2.yml:/opt/routr/config/log4j2.yml
+  mediaserver:
+    env_file: .env
+    image: fonoster/fonos-mediaserver:latest
+    restart: always
+    ports: ['6060:6060']
+    volumes:
+      - ./config/extensions.conf:/etc/asterisk/extensions.conf
+      - ./config/rtp.conf:/etc/asterisk/rtp.conf
   redis:
     image: redis:6.0.3-alpine
     command: ['redis-server', '--appendonly', 'yes']
@@ -15,6 +25,8 @@ services:
     image: psanders/rtpengine:latest
     restart: always
     ports: ['22222:22222/udp', '20000-20100:20000-20100/udp']
+    environment:
+      PUBLIC_IP: ${EXTERN_ADDR}    
   rtpengine-middleware:
     env_file: .env
     image: psanders/rtpengine-mw:latest
