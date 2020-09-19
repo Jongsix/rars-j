@@ -4,9 +4,10 @@ services:
     env_file: .env
     image: psanders/routr:rtpengine_support
     depends_on: [redis]
-    ports: ['5060:5060', '5060:5060/udp', '4567:4567']
+    ports: ['5060-5063:5060-5063', '5060:5060/udp', '4567:4567']
     volumes:  
       - ./config/log4j2.yml:/opt/routr/config/log4j2.yml
+      - ./config/routr_config.yml:/opt/routr/config/config.yml
   mediaserver:
     env_file: .env
     image: fonoster/fonos-mediaserver:latest

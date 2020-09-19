@@ -1,0 +1,11 @@
+apiVersion: v1beta1
+spec:
+  transport:
+    - protocol: tcp
+      port: 5060
+    - protocol: udp
+      port: 5060
+    - protocol: ws
+      port: 5062
+    - protocol: wss
+      port: 5063
