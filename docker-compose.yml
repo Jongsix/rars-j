@@ -5,7 +5,7 @@ services:
   # SIP server
   routr:
     env_file: .env
-    image: fonoster/routr:latest
+    image: psanders/routr:rtpengine_support
     depends_on: [redis]
     environment: 
       DATA_SOURCE_PROVIDER: ${ROUTR_DATA_SOURCE_PROVIDER}
