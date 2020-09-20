@@ -26,7 +26,7 @@
       telUrl: 'tel:9198972120'
       aorLink: 'sip:ast@sip.local'
 
-# Asterisk Peer
+# Asterisk and Jitsi Peers
 
 - apiVersion: v1beta1
   kind: Peer
@@ -36,6 +36,16 @@
     device: sip.local
     credentials:
       username: ast
+      secret: 'changeit'
+
+- apiVersion: v1beta1
+  kind: Peer
+  metadata:
+    name: Jitsi Meet
+  spec:
+    device: sip.local
+    credentials:
+      username: jitsi-meet
       secret: 'changeit'
 
 # Local Domain

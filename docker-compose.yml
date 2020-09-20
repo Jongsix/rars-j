@@ -1,21 +1,31 @@
 version: '3.7'
+
 services:
+
+  # SIP server
   routr:
     env_file: .env
-    image: psanders/routr:rtpengine_support
+    image: fonoster/routr:latest
     depends_on: [redis]
     environment: 
       DATA_SOURCE_PROVIDER: ${ROUTR_DATA_SOURCE_PROVIDER}
       DATA_SOURCE_PARAMETERS: ${ROUTR_DATA_SOURCE_PARAMETERS}
       EX_MEDIA_ENGINE_HOST: ${ROUTR_MEDIA_ENGINE_HOST}
       EX_MEDIA_ENGINE_PORT: ${ROUTR_MEDIA_ENGINE_PORT}
+      RECORD_ROUTE: "true"
+      REGISTRAR_INTF: Internal
     ports:
       - ${ROUTR_SIP_PORTS}
       - ${ROUTR_API_PORT}:${ROUTR_API_PORT}
     volumes:  
       - ./config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
       - ./config/routr/config.yml:/opt/routr/config/config.yml
+    networks:
+      rars-j:
+        aliases:
+          - routr.rars-j
 
+  # VoIP network bootstrap
   routr-bootstrap:
     env_file: .env
     build:
@@ -29,14 +39,20 @@ services:
       '
     volumes:
       - ./config/routr/bootstrap.yml:/etc/bootstrap.yml:ro
+    networks:
+      rars-j:
 
+  # SIP.js based softphone for test with legacy SIP endpoints
   wphone:
     env_file: .env
     image: psanders/wphone:latest
     restart: always
+    environment: 
+      WPHONE_DEST: sip:jitsi-meet@sip.local
     ports: 
       - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
 
+  # Support for basic media server capabilities such as IVR, Recording, etc.
   mediaserver:
     env_file: .env
     image: fonoster/fonos-mediaserver:latest
@@ -51,14 +67,22 @@ services:
     volumes:
       - ./config/asterisk/extensions.conf:/etc/asterisk/extensions.conf
       - ./config/asterisk/rtp.conf:/etc/asterisk/rtp.conf
+    networks:
+      rars-j:
 
+  # DB support Routr's operations
   redis:
     image: redis:6.0.3-alpine
     command: ['redis-server', '--appendonly', 'yes']
     hostname: redis
     expose: 
       - ${REDIS_PORT}
+    networks:
+      rars-j:
+        aliases:
+          - redis.rars-j
 
+  # Media relay engine
   rtpengine:
     env_file: .env
     image: psanders/rtpengine:latest
@@ -70,6 +94,10 @@ services:
       PUBLIC_IP: ${EXTERN_ADDR}
       PORT_MIN: ${RTPE_PORT_MIN}
       PORT_MAX: ${RTPE_PORT_MAX}
+    networks:
+      rars-j:
+        aliases:
+          - rtpengine.rars-j
 
   rtpengine-middleware:
     env_file: .env
@@ -79,4 +107,11 @@ services:
       REMOTE_HOST: ${RTPEMW_REMOTE_HOST}
     ports: 
       - ${RTPEMW_PORT}:${RTPEMW_PORT}/tcp
+    networks:
+      rars-j:
+        aliases:
+          - rtpengine-middleware.rars-j
 
+# Custom network so all services can communicate using a FQDN
+networks:
+  rars-j:
