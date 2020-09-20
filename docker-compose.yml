@@ -6,21 +6,38 @@ services:
     depends_on: [redis]
     ports: ['5060-5063:5060-5063', '5060:5060/udp', '4567:4567']
     volumes:  
-      - ./config/log4j2.yml:/opt/routr/config/log4j2.yml
-      - ./config/routr_config.yml:/opt/routr/config/config.yml
+      - ./config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
+      - ./config/routr/config.yml:/opt/routr/config/config.yml
+
+  routr-bootstrap:
+    env_file: .env
+    build:
+      context: .rctl
+    entrypoint: |
+      sh -c '
+        while ! nc -z $SIPPROXY_HOST ${SIPPROXY_API_PORT}; do sleep 0.1; done
+        rctl login https://${SIPPROXY_HOST}:${SIPPROXY_API_PORT}/api/v1beta1 \
+          -u ${SIPPROXY_API_USERNAME} -p ${SIPPROXY_API_SECRET}
+        rctl create -f /etc/bootstrap.yml
+      '
+    volumes:
+      - ./config/routr/bootstrap.yml:/etc/bootstrap.yml:ro
+  
   mediaserver:
     env_file: .env
     image: fonoster/fonos-mediaserver:latest
     restart: always
     ports: ['6060:6060']
     volumes:
-      - ./config/extensions.conf:/etc/asterisk/extensions.conf
-      - ./config/rtp.conf:/etc/asterisk/rtp.conf
+      - ./config/asterisk/extensions.conf:/etc/asterisk/extensions.conf
+      - ./config/asterisk/rtp.conf:/etc/asterisk/rtp.conf
+
   redis:
     image: redis:6.0.3-alpine
     command: ['redis-server', '--appendonly', 'yes']
     hostname: redis
     expose: [6379]
+
   rtpengine:
     env_file: .env
     image: psanders/rtpengine:latest
@@ -28,8 +45,10 @@ services:
     ports: ['22222:22222/udp', '20000-20100:20000-20100/udp']
     environment:
       PUBLIC_IP: ${EXTERN_ADDR}    
+  
   rtpengine-middleware:
     env_file: .env
     image: psanders/rtpengine-mw:latest
     restart: always
     ports: ['3000:3000/tcp']
+
