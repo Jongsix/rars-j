@@ -4,7 +4,14 @@ services:
     env_file: .env
     image: psanders/routr:rtpengine_support
     depends_on: [redis]
-    ports: ['5060-5063:5060-5063', '5060:5060/udp', '4567:4567']
+    environment: 
+      DATA_SOURCE_PROVIDER: ${ROUTR_DATA_SOURCE_PROVIDER}
+      DATA_SOURCE_PARAMETERS: ${ROUTR_DATA_SOURCE_PARAMETERS}
+      EX_MEDIA_ENGINE_HOST: ${ROUTR_MEDIA_ENGINE_HOST}
+      EX_MEDIA_ENGINE_PORT: ${ROUTR_MEDIA_ENGINE_PORT}
+    ports:
+      - ${ROUTR_SIP_PORTS}
+      - ${ROUTR_API_PORT}:${ROUTR_API_PORT}
     volumes:  
       - ./config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
       - ./config/routr/config.yml:/opt/routr/config/config.yml
@@ -15,19 +22,32 @@ services:
       context: .rctl
     entrypoint: |
       sh -c '
-        while ! nc -z $SIPPROXY_HOST ${SIPPROXY_API_PORT}; do sleep 0.1; done
-        rctl login https://${SIPPROXY_HOST}:${SIPPROXY_API_PORT}/api/v1beta1 \
-          -u ${SIPPROXY_API_USERNAME} -p ${SIPPROXY_API_SECRET}
+        while ! nc -z $ROUTR_HOST ${ROUTR_API_PORT}; do sleep 0.1; done
+        rctl login https://${ROUTR_HOST}:${ROUTR_API_PORT}/api/v1beta1 \
+          -u ${ROUTR_API_USERNAME} -p ${ROUTR_API_SECRET}
         rctl create -f /etc/bootstrap.yml
       '
     volumes:
       - ./config/routr/bootstrap.yml:/etc/bootstrap.yml:ro
-  
+
+  wphone:
+    env_file: .env
+    image: psanders/wphone:latest
+    restart: always
+    ports: 
+      - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
+
   mediaserver:
     env_file: .env
     image: fonoster/fonos-mediaserver:latest
     restart: always
-    ports: ['6060:6060']
+    environment:
+      AGI_URL: ${ASTERISK_AGI_URL}
+      SIPPROXY_HOST: ${ASTERISK_SIPPROXY_HOST}
+      SIPPROXY_USERNAME: ${ASTERISK_SIPPROXY_USERNAME}
+      SIPPROXY_SECRET: ${ASTERISK_SIPPROXY_SECRET} 
+    ports: 
+      - ${ASTERISK_SIP_PORT}:${ASTERISK_SIP_PORT}
     volumes:
       - ./config/asterisk/extensions.conf:/etc/asterisk/extensions.conf
       - ./config/asterisk/rtp.conf:/etc/asterisk/rtp.conf
@@ -36,19 +56,27 @@ services:
     image: redis:6.0.3-alpine
     command: ['redis-server', '--appendonly', 'yes']
     hostname: redis
-    expose: [6379]
+    expose: 
+      - ${REDIS_PORT}
 
   rtpengine:
     env_file: .env
     image: psanders/rtpengine:latest
     restart: always
-    ports: ['22222:22222/udp', '20000-20100:20000-20100/udp']
+    ports: 
+      - ${RTPE_NG_PORT}:${RTPE_NG_PORT}/udp 
+      - ${RTPE_PORT_MIN}-${RTPE_PORT_MAX}:${RTPE_PORT_MIN}-${RTPE_PORT_MAX}/udp
     environment:
-      PUBLIC_IP: ${EXTERN_ADDR}    
-  
+      PUBLIC_IP: ${EXTERN_ADDR}
+      PORT_MIN: ${RTPE_PORT_MIN}
+      PORT_MAX: ${RTPE_PORT_MAX}
+
   rtpengine-middleware:
     env_file: .env
     image: psanders/rtpengine-mw:latest
     restart: always
-    ports: ['3000:3000/tcp']
+    environment:
+      REMOTE_HOST: ${RTPEMW_REMOTE_HOST}
+    ports: 
+      - ${RTPEMW_PORT}:${RTPEMW_PORT}/tcp
 
