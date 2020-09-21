@@ -32,7 +32,7 @@ services:
       context: .rctl
     entrypoint: |
       sh -c '
-        while ! nc -z $ROUTR_HOST ${ROUTR_API_PORT}; do sleep 0.1; done
+        while ! nc -z $ROUTR_HOST ${ROUTR_API_PORT}; do sleep 0.05; done
         rctl login https://${ROUTR_HOST}:${ROUTR_API_PORT}/api/v1beta1 \
           -u ${ROUTR_API_USERNAME} -p ${ROUTR_API_SECRET}
         rctl create -f /etc/bootstrap.yml

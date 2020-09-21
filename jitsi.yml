@@ -48,7 +48,7 @@ services:
     jigasi:
         entrypoint: |
             sh -c '
-                /wait-for-it.sh -t 20 ${ROUTR_HOST}:${ROUTR_API_PORT} -- /init
+                /wait-for-it.sh -t 0 ${ROUTR_HOST}:${ROUTR_API_PORT} -- /init
             '
         image: jitsi/jigasi:stable-4857
         restart: ${RESTART_POLICY}
