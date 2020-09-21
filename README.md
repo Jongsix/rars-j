@@ -30,7 +30,7 @@ For Windows:
 echo web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri | % { mkdir "~/.jitsi-meet-cfg/$_" }
 ```
 
-➌ Update the `EXTERN_ADDR` and `DOCKER_HOST_ADDRESS` at file `.env` to reflect your enviroment. 
+➌ Update the variables `EXTERN_ADDR` and `DOCKER_HOST_ADDRESS` at file `.env` to reflect your enviroment. 
 
 ## Running the stack
 
