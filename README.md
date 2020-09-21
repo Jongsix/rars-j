@@ -3,18 +3,22 @@
 This stack features the basic components to create a VoIP infrastructure to deliver voice, video, messanging and file sharing.
 It uses Routr I/O as the SIP Server, RTPEngine for media relay and SIP.js as client. It also uses Jitsi Meet for video confer
 
-# Requiremenets
+## Requiremenets
 
 - Docker and Compose
 
-# Running the Stack
+## Running the Stack
 
 - Create required CONFIG directories
 ```bash
 mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
 ```
 
-For Windows: `echo web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri | % { mkdir "~/.jitsi-meet-cfg/$_" }`
+For Windows: 
+
+```bash
+echo web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri | % { mkdir "~/.jitsi-meet-cfg/$_" }
+```
 
 - Run `docker-compose -f docker-compose.yml -f jitsi.yml up`
 
