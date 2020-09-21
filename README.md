@@ -22,4 +22,4 @@ echo web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,j
 
 - Run `docker-compose -f docker-compose.yml -f jitsi.yml up`
 
-Once all the services are up, open [Jitsi Meet](https://localhost:8443/FamousFirulette) and the [Demo Page](http://localhost:8080)
+Once all the services are up open [Jitsi Meet](https://localhost:8443/FamousFirulette) and the [demo page](http://localhost:8080)
