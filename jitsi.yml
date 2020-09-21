@@ -48,7 +48,9 @@ services:
     jigasi:
         entrypoint: |
             sh -c '
-                /wait-for-it.sh -t 0 ${ROUTR_HOST}:${ROUTR_API_PORT} -- /init
+                # Sleep for another 10 seconds to allow routr-bootstrap to run
+                /wait-for-it.sh -t 0 ${ROUTR_HOST}:${ROUTR_API_PORT} -- sleep 10s
+                /init
             '
         image: jitsi/jigasi:stable-4857
         restart: ${RESTART_POLICY}
@@ -216,3 +218,6 @@ services:
             - prosody
         networks:
             rars-j:
+
+networks:
+   rars-j:
