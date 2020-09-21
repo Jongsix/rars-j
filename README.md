@@ -32,9 +32,9 @@ echo web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,j
 
 ➌ Update the `EXTERN_ADDR` and `DOCKER_HOST_ADDRESS` at file `.env` to reflect your enviroment. 
 
-# Running the stack
+## Running the stack
 
-To run the stack, execute the following command:
+Run the stack with the following command:
 
 ```bash
 docker-compose -f docker-compose.yml -f jitsi.yml up
