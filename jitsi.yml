@@ -46,11 +46,16 @@ services:
 
     # SIP gateway (audio)
     jigasi:
+        entrypoint: |
+            sh -c '
+                /wait-for-it.sh ${ROUTR_HOST}:${ROUTR_API_PORT} -- /init
+            '
         image: jitsi/jigasi:stable-4857
         restart: ${RESTART_POLICY}
         ports:
             - '${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}:${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}/udp'
         volumes:
+            - ./etc/wait-for-it.sh:/wait-for-it.sh
             - ${CONFIG}/jigasi:/config:Z
             - ${CONFIG}/transcripts:/tmp/transcripts:Z
         environment:
@@ -87,7 +92,6 @@ services:
             - TZ
         depends_on:
             - prosody
-            - routr
         networks:
             rars-j:
 
