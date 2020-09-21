@@ -47,8 +47,6 @@ services:
     env_file: .env
     image: psanders/wphone:latest
     restart: always
-    environment: 
-      WPHONE_DEST: sip:jitsi-meet@sip.local
     ports: 
       - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
 
