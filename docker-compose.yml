@@ -12,14 +12,13 @@ services:
       DATA_SOURCE_PARAMETERS: ${ROUTR_DATA_SOURCE_PARAMETERS}
       EX_MEDIA_ENGINE_HOST: ${ROUTR_MEDIA_ENGINE_HOST}
       EX_MEDIA_ENGINE_PORT: ${ROUTR_MEDIA_ENGINE_PORT}
-      RECORD_ROUTE: "true"
-      REGISTRAR_INTF: Internal
     ports:
       - ${ROUTR_SIP_PORTS}
       - ${ROUTR_API_PORT}:${ROUTR_API_PORT}
     volumes:  
       - ./config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
       - ./config/routr/config.yml:/opt/routr/config/config.yml
+      #- /Users/pedrosanders/Projects/routr/libs/server.bundle.js:/opt/routr/libs/server.bundle.js
     networks:
       rars-j:
         aliases:
