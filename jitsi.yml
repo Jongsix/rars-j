@@ -12,6 +12,8 @@ services:
             - ${CONFIG}/web:/config:Z
             - ${CONFIG}/web/letsencrypt:/etc/letsencrypt:Z
             - ${CONFIG}/transcripts:/usr/share/jitsi-meet/transcripts:Z
+            - ./config/jitsi/interface_config.js:/config/interface_config.js
+            - ./etc/ac-logo-white.png:/usr/share/jitsi-meet/images/watermark.png
         environment:
             - ENABLE_AUTH
             - ENABLE_GUESTS
