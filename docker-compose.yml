@@ -18,7 +18,9 @@ services:
     volumes:  
       - ./config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
       - ./config/routr/config.yml:/opt/routr/config/config.yml
-      #- /Users/pedrosanders/Projects/routr/libs/server.bundle.js:/opt/routr/libs/server.bundle.js
+      - /Users/pedrosanders/Projects/routr/libs/server.bundle.js:/opt/routr/libs/server.bundle.js
+      - /Users/pedrosanders/Projects/routr/libs/registry.bundle.js:/opt/routr/libs/registry.bundle.js
+      - /Users/pedrosanders/Projects/routr/libs/route_loader.bundle.js:/opt/routr/libs/route_loader.bundle.js
     networks:
       rars-j:
         aliases:
