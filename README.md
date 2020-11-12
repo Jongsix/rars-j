@@ -3,8 +3,6 @@
 This stack features the basic components to create a VoIP infrastructure to deliver voice, video, messanging and file sharing.
 It uses [Routr I/O](https://github.com/fonoster/routr) as the SIP Server, RTPEngine for media relay and SIP.js as client. It also uses Jitsi Meet for video conferencing.
 
-> It is also possible to use Janus instead of Jitsi Meet
-
 ## Requirements
 
 - Docker and Docker Compose
