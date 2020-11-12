@@ -40,4 +40,4 @@ Run the stack with the following command:
 docker-compose -f docker-compose.yml -f jitsi.yml up
 ```
 
-Once all the services are up open [Jitsi Meet](https://localhost:8443/FamousFirulette) and the [demo page](http://localhost:8080)
+Once all the services are up open [Jitsi Meet](http://localhost:8000/FamousFirulette) and the [demo page](http://localhost:8080)
