@@ -4,7 +4,6 @@ services:
 
   # SIP server
   routr:
-    env_file: .env
     image: psanders/routr:rtpengine_support
     depends_on: [redis]
     environment: 
@@ -25,9 +24,7 @@ services:
 
   # VoIP network bootstrap
   routr-bootstrap:
-    env_file: .env
-    build:
-      context: .rctl
+    image: fonoster:routr-ctl
     entrypoint: |
       sh -c '
         /wait-for-it.sh -t 0 ${ROUTR_HOST}:${ROUTR_API_PORT}
@@ -43,7 +40,6 @@ services:
 
   # SIP.js based softphone for test with legacy SIP endpoints
   wphone:
-    env_file: .env
     image: psanders/wphone:latest
     restart: always
     ports: 
@@ -51,7 +47,6 @@ services:
 
   # Support for basic media server capabilities such as IVR, Recording, etc.
   mediaserver:
-    env_file: .env
     image: fonoster/fonos-mediaserver:latest
     restart: always
     environment:
@@ -81,7 +76,6 @@ services:
 
   # Media relay engine
   rtpengine:
-    env_file: .env
     image: psanders/rtpengine:latest
     restart: always
     ports: 
@@ -98,7 +92,6 @@ services:
 
   # Media relay engine helper
   rtpengine-middleware:
-    env_file: .env
     image: psanders/rtpengine-mw:latest
     restart: always
     environment:
