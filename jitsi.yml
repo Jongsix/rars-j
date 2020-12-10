@@ -12,8 +12,8 @@ services:
             - ${CONFIG}/web:/config:Z
             - ${CONFIG}/web/letsencrypt:/etc/letsencrypt:Z
             - ${CONFIG}/transcripts:/usr/share/jitsi-meet/transcripts:Z
-            - ./config/jitsi/interface_config.js:/config/interface_config.js
-            - ./etc/ac-logo-white.png:/usr/share/jitsi-meet/images/watermark.png
+            - ${CONFIG}/config/jitsi/interface_config.js:/config/interface_config.js
+            - ${CONFIG}/etc/ac-logo-white.png:/usr/share/jitsi-meet/images/watermark.png
         environment:
             - ENABLE_AUTH
             - ENABLE_GUESTS
@@ -59,7 +59,7 @@ services:
         ports:
             - '${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}:${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}/udp'
         volumes:
-            - ./etc/wait-for-it.sh:/wait-for-it.sh
+            - ${CONFIG}/etc/wait-for-it.sh:/wait-for-it.sh
             - ${CONFIG}/jigasi:/config:Z
             - ${CONFIG}/transcripts:/tmp/transcripts:Z
         environment:

@@ -21,13 +21,13 @@ git clone https://github.com/psanders/rars-j
 ➋  Create required CONFIG directories
 
 ```bash
-mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
+mkdir -p ~/.jitsi-meet-cfg/{config/jitsi,etc,web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
 ```
 
 For Windows: 
 
 ```bash
-echo web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri | % { mkdir "~/.jitsi-meet-cfg/$_" }
+echo config/jitsi,etc,web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri | % { mkdir "~/.jitsi-meet-cfg/$_" }
 ```
 
 ➌ Update the variables `EXTERN_ADDR` and `DOCKER_HOST_ADDRESS` at file `.env` to reflect your enviroment. 

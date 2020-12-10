@@ -15,8 +15,8 @@ services:
       - ${ROUTR_SIP_PORTS}
       - ${ROUTR_API_PORT}:${ROUTR_API_PORT}
     volumes:  
-      - ./config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
-      - ./config/routr/config.yml:/opt/routr/config/config.yml
+      - ${CONFIG}/config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
+      - ${CONFIG}/config/routr/config.yml:/opt/routr/config/config.yml
     networks:
       rars-j:
         aliases:
@@ -24,7 +24,7 @@ services:
 
   # VoIP network bootstrap
   routr-bootstrap:
-    image: fonoster:routr-ctl
+    image: fonoster/routr-ctl
     entrypoint: |
       sh -c '
         /wait-for-it.sh -t 0 ${ROUTR_HOST}:${ROUTR_API_PORT}
@@ -33,8 +33,8 @@ services:
         rctl create -f /etc/bootstrap.yml
       '
     volumes:
-      - ./config/routr/bootstrap.yml:/etc/bootstrap.yml:ro
-      - ./etc/wait-for-it.sh:/wait-for-it.sh
+      - ${CONFIG}/config/routr/bootstrap.yml:/etc/bootstrap.yml:ro
+      - ${CONFIG}/etc/wait-for-it.sh:/wait-for-it.sh
     networks:
       rars-j:
 
@@ -50,6 +50,7 @@ services:
     image: fonoster/fonos-mediaserver:latest
     restart: always
     environment:
+      EXTERN_ADDR: ${EXTERN_ADDR}
       AGI_URL: ${ASTERISK_AGI_URL}
       SIPPROXY_HOST: ${ASTERISK_SIPPROXY_HOST}
       SIPPROXY_USERNAME: ${ASTERISK_SIPPROXY_USERNAME}
@@ -57,8 +58,8 @@ services:
     ports: 
       - ${ASTERISK_SIP_PORT}:${ASTERISK_SIP_PORT}
     volumes:
-      - ./config/asterisk/extensions.conf:/etc/asterisk/extensions.conf
-      - ./config/asterisk/rtp.conf:/etc/asterisk/rtp.conf
+      - ${CONFIG}/config/asterisk/extensions.conf:/etc/asterisk/extensions.conf
+      - ${CONFIG}/config/asterisk/rtp.conf:/etc/asterisk/rtp.conf
     networks:
       rars-j:
 
