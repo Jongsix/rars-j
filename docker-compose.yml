@@ -39,11 +39,11 @@ services:
       rars-j:
 
   # SIP.js based softphone for test with legacy SIP endpoints
-  wphone:
-    image: psanders/wphone:latest
-    restart: always
-    ports: 
-      - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
+  #wphone:
+  #  image: psanders/wphone:latest
+  #  restart: always
+  #  ports: 
+  #    - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
 
   # Support for basic media server capabilities such as IVR, Recording, etc.
   mediaserver:
