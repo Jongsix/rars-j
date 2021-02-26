@@ -30,7 +30,7 @@ For Windows:
 echo config/jitsi,etc,web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri | % { mkdir "~/.jitsi-meet-cfg/$_" }
 ```
 
-➌ Update the variables `EXTERN_ADDR` and `DOCKER_HOST_ADDRESS` at file `.env` to reflect your enviroment. 
+➌ Copy the example enviroment file `env_example` into `.env` and then update the variables `DOCKER_HOST_ADDRESS` and `CONFIG` to reflect your environment.
 
 ## Running the stack
 
@@ -39,5 +39,7 @@ Run the stack with the following command:
 ```bash
 docker-compose -f docker-compose.yml -f jitsi.yml up
 ```
+
+> Only use the jitsi.yml if you need jitsi meet in your mini voip infrastructure.
 
 Once all the services are up, go to [Jitsi Meet](http://localhost:8000/FamousFirulette) to start the conference.
