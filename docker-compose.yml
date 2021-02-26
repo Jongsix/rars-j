@@ -4,9 +4,10 @@ services:
 
   # SIP server
   routr:
-    image: psanders/routr:rtpengine_support
+    image: fonoster/routr:1.0.0-edge-20210226.1
     depends_on: [redis]
     environment: 
+      EXTERN_ADDR: ${DOCKER_HOST_ADDRESS}
       DATA_SOURCE_PROVIDER: ${ROUTR_DATA_SOURCE_PROVIDER}
       DATA_SOURCE_PARAMETERS: ${ROUTR_DATA_SOURCE_PARAMETERS}
       EX_MEDIA_ENGINE_HOST: ${ROUTR_MEDIA_ENGINE_HOST}
@@ -39,18 +40,18 @@ services:
       rars-j:
 
   # SIP.js based softphone for test with legacy SIP endpoints
-  #wphone:
-  #  image: psanders/wphone:latest
-  #  restart: always
-  #  ports: 
-  #    - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
+  wphone:
+    image: psanders/wphone:latest
+    restart: always
+    ports: 
+      - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
 
   # Support for basic media server capabilities such as IVR, Recording, etc.
   mediaserver:
     image: fonoster/fonos-mediaserver:latest
     restart: always
     environment:
-      EXTERN_ADDR: ${EXTERN_ADDR}
+      EXTERN_ADDR: ${DOCKER_HOST_ADDRESS}
       AGI_URL: ${ASTERISK_AGI_URL}
       SIPPROXY_HOST: ${ASTERISK_SIPPROXY_HOST}
       SIPPROXY_USERNAME: ${ASTERISK_SIPPROXY_USERNAME}
@@ -83,7 +84,7 @@ services:
       - ${RTPE_NG_PORT}:${RTPE_NG_PORT}/udp 
       - ${RTPE_PORT_MIN}-${RTPE_PORT_MAX}:${RTPE_PORT_MIN}-${RTPE_PORT_MAX}/udp
     environment:
-      PUBLIC_IP: ${EXTERN_ADDR}
+      PUBLIC_IP: ${DOCKER_HOST_ADDRESSS}
       PORT_MIN: ${RTPE_PORT_MIN}
       PORT_MAX: ${RTPE_PORT_MAX}
     networks:
