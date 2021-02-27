@@ -3,13 +3,13 @@
 - apiVersion: v1beta1
   kind: Gateway
   metadata:
-    name: Provider, Inc
+    name: The name of your provider
     ref:  GW0001
   spec:
-    host: atlanta2.voip.ms
+    host: sip.yourprovider.net
     transport: tcp
     credentials:
-      username: 'acct'
+      username: 'yourusername'
       secret: changeit
 
 - apiVersion: v1beta1
@@ -18,13 +18,13 @@
     ref: Number0001
     gwRef: GW0001
     geoInfo:
-      city: Columbus, GA
+      city: Unknown, Unknown
       country: USA
       countryISOCode: US
   spec:
     location:
-      telUrl: 'tel:9198972120'
-      aorLink: 'sip:ast@sip.local'
+      telUrl: 'tel:+19198972120'
+      aorLink: 'sip:1001@acme.com'
 
 # Asterisk and Jitsi Peers
 
@@ -33,7 +33,7 @@
   metadata:
     name: Asterisk PBX
   spec:
-    device: sip.local
+    device: acme.com
     credentials:
       username: ast
       secret: 'changeit'
@@ -43,7 +43,7 @@
   metadata:
     name: Jitsi Meet
   spec:
-    device: sip.local
+    device: acme.com
     credentials:
       username: jitsi-meet
       secret: 'changeit'
@@ -53,10 +53,13 @@
 - apiVersion: v1beta1
   kind: Domain
   metadata:
-    name: Local SIP Server
+    name: Test SIP Server
   spec:
     context:
-      domainUri: sip.local
+      domainUri: acme.com
+      egressPolicy:
+        rule: .*
+        numberRef: Number0001
 
 # Agents need Domains
 
@@ -68,7 +71,7 @@
     credentials:
       username: '1001'
       secret: '1234'
-    domains: [sip.local]
+    domains: [acme.com]
 
 - apiVersion: v1beta1
   kind: Agent
@@ -78,4 +81,4 @@
     credentials:
       username: '1002'
       secret: '1234'
-    domains: [sip.local]
+    domains: [acme.com]
