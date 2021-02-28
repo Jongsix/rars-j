@@ -33,7 +33,7 @@
   metadata:
     name: Asterisk PBX
   spec:
-    device: acme.com
+    device: node1
     credentials:
       username: ast
       secret: 'changeit'
@@ -43,7 +43,7 @@
   metadata:
     name: Jitsi Meet
   spec:
-    device: acme.com
+    device: node1
     credentials:
       username: jitsi-meet
       secret: 'changeit'
