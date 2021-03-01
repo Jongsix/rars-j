@@ -1,10 +1,10 @@
-version: '3.7'
+version: '3.4'
 
 services:
 
   # SIP server
   routr:
-    image: fonoster/routr:1.0.0-edge-20210226.1
+    image: fonoster/routr:1.0.0-edge-20210228.1
     depends_on: [redis]
     environment: 
       EXTERN_ADDR: ${DOCKER_HOST_ADDRESS}
@@ -12,12 +12,14 @@ services:
       DATA_SOURCE_PARAMETERS: ${ROUTR_DATA_SOURCE_PARAMETERS}
       EX_MEDIA_ENGINE_HOST: ${ROUTR_MEDIA_ENGINE_HOST}
       EX_MEDIA_ENGINE_PORT: ${ROUTR_MEDIA_ENGINE_PORT}
+      RECORD_ROUTE: 'true'
     ports:
       - ${ROUTR_SIP_PORTS}
       - ${ROUTR_API_PORT}:${ROUTR_API_PORT}
     volumes:  
       - ${CONFIG}/config/routr/log4j2.yml:/opt/routr/config/log4j2.yml
       - ${CONFIG}/config/routr/config.yml:/opt/routr/config/config.yml
+      - ${CONFIG}/etc/domains-cert.jks:/opt/routr/etc/certs/domains-cert.jks
     networks:
       rars-j:
         aliases:
@@ -39,13 +41,6 @@ services:
     networks:
       rars-j:
 
-  # SIP.js based softphone for test with legacy SIP endpoints
-  wphone:
-    image: psanders/wphone:latest
-    restart: always
-    ports: 
-      - ${WPHONE_SERVICE_PORT}:${WPHONE_SERVICE_PORT}
-
   # Support for basic media server capabilities such as IVR, Recording, etc.
   mediaserver:
     image: fonoster/fonos-mediaserver:latest
@@ -55,7 +50,7 @@ services:
       AGI_URL: ${ASTERISK_AGI_URL}
       SIPPROXY_HOST: ${ASTERISK_SIPPROXY_HOST}
       SIPPROXY_USERNAME: ${ASTERISK_SIPPROXY_USERNAME}
-      SIPPROXY_SECRET: ${ASTERISK_SIPPROXY_SECRET} 
+      SIPPROXY_SECRET: ${ASTERISK_SIPPROXY_SECRET}
     ports: 
       - ${ASTERISK_SIP_PORT}:${ASTERISK_SIP_PORT}
     volumes:
@@ -84,7 +79,7 @@ services:
       - ${RTPE_NG_PORT}:${RTPE_NG_PORT}/udp 
       - ${RTPE_PORT_MIN}-${RTPE_PORT_MAX}:${RTPE_PORT_MIN}-${RTPE_PORT_MAX}/udp
     environment:
-      PUBLIC_IP: ${DOCKER_HOST_ADDRESSS}
+      PUBLIC_IP: ${DOCKER_HOST_ADDRESS}
       PORT_MIN: ${RTPE_PORT_MIN}
       PORT_MAX: ${RTPE_PORT_MAX}
     networks:
