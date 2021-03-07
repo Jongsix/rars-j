@@ -4,7 +4,7 @@ services:
 
   # SIP server
   routr:
-    image: fonoster/routr:1.0.0-edge-20210228.1
+    image: fonoster/routr:1.0.0-edge-20210306
     depends_on: [redis]
     environment: 
       EXTERN_ADDR: ${DOCKER_HOST_ADDRESS}
@@ -82,6 +82,7 @@ services:
       PUBLIC_IP: ${DOCKER_HOST_ADDRESS}
       PORT_MIN: ${RTPE_PORT_MIN}
       PORT_MAX: ${RTPE_PORT_MAX}
+      LOG_LEVEL: '7'
     networks:
       rars-j:
         aliases:
