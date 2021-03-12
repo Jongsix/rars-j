@@ -4,7 +4,7 @@ services:
 
   # SIP server
   routr:
-    image: fonoster/routr:1.0.0-edge-20210306
+    image: fonoster/routr:latest
     depends_on: [redis]
     environment: 
       EXTERN_ADDR: ${DOCKER_HOST_ADDRESS}
@@ -13,6 +13,7 @@ services:
       EX_MEDIA_ENGINE_HOST: ${ROUTR_MEDIA_ENGINE_HOST}
       EX_MEDIA_ENGINE_PORT: ${ROUTR_MEDIA_ENGINE_PORT}
       RECORD_ROUTE: 'true'
+      REGISTRAR_INTF: Internal
     ports:
       - ${ROUTR_SIP_PORTS}
       - ${ROUTR_API_PORT}:${ROUTR_API_PORT}
@@ -76,13 +77,14 @@ services:
     image: psanders/rtpengine:latest
     restart: always
     ports: 
+      - ${RTPE_HTTP_PORT}:${RTPE_HTTP_PORT} 
       - ${RTPE_NG_PORT}:${RTPE_NG_PORT}/udp 
       - ${RTPE_PORT_MIN}-${RTPE_PORT_MAX}:${RTPE_PORT_MIN}-${RTPE_PORT_MAX}/udp
     environment:
       PUBLIC_IP: ${DOCKER_HOST_ADDRESS}
       PORT_MIN: ${RTPE_PORT_MIN}
       PORT_MAX: ${RTPE_PORT_MAX}
-      LOG_LEVEL: '7'
+      LOG_LEVEL: '6'
     networks:
       rars-j:
         aliases:
