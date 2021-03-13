@@ -4,14 +4,15 @@ services:
 
   # SIP server
   routr:
-    image: fonoster/routr:latest
+    image: fonoster/routr:1.0.0-edge-20210313
     depends_on: [redis]
     environment: 
       EXTERN_ADDR: ${DOCKER_HOST_ADDRESS}
       DATA_SOURCE_PROVIDER: ${ROUTR_DATA_SOURCE_PROVIDER}
       DATA_SOURCE_PARAMETERS: ${ROUTR_DATA_SOURCE_PARAMETERS}
-      EX_MEDIA_ENGINE_HOST: ${ROUTR_MEDIA_ENGINE_HOST}
-      EX_MEDIA_ENGINE_PORT: ${ROUTR_MEDIA_ENGINE_PORT}
+      EX_RTP_ENGINE_ENABLED: 'true'
+      EX_RTP_ENGINE_HOST: ${ROUTR_RTP_ENGINE_HOST}
+      EX_RTP_ENGINE_PORT: ${ROUTR_RTP_ENGINE_PORT}
       RECORD_ROUTE: 'true'
       REGISTRAR_INTF: Internal
     ports:
@@ -89,19 +90,6 @@ services:
       rars-j:
         aliases:
           - rtpengine.rars-j
-
-  # Media relay engine helper
-  rtpengine-middleware:
-    image: psanders/rtpengine-mw:latest
-    restart: always
-    environment:
-      REMOTE_HOST: ${RTPEMW_REMOTE_HOST}
-    ports: 
-      - ${RTPEMW_PORT}:${RTPEMW_PORT}/tcp
-    networks:
-      rars-j:
-        aliases:
-          - rtpengine-middleware.rars-j
 
 # Custom network so all services can communicate using a FQDN
 networks:
