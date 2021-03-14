@@ -4,7 +4,7 @@ services:
 
   # SIP server
   routr:
-    image: fonoster/routr:1.0.0-edge-20210313
+    image: fonoster/routr:1.0.0-edge-20210314
     depends_on: [redis]
     environment: 
       EXTERN_ADDR: ${DOCKER_HOST_ADDRESS}
