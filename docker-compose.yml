@@ -82,6 +82,7 @@ services:
       - ${RTPE_NG_PORT}:${RTPE_NG_PORT}/udp 
       - ${RTPE_PORT_MIN}-${RTPE_PORT_MAX}:${RTPE_PORT_MIN}-${RTPE_PORT_MAX}/udp
     environment:
+      BIND_HTTP_PORT: ${RTPE_HTTP_PORT}
       PUBLIC_IP: ${DOCKER_HOST_ADDRESS}
       PORT_MIN: ${RTPE_PORT_MIN}
       PORT_MAX: ${RTPE_PORT_MAX}
